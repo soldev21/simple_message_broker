@@ -13,13 +13,12 @@ public class Server {
             String name = UUID.randomUUID().toString();
             Runnable runnable = () -> {
                 try {
-                    System.out.println("Connection accepted: "+name);
+                    System.out.println("Connection accepted: " + name);
                     DataInputStream reader = new DataInputStream(clientSocket.getInputStream());
-                    String s;
-                    while ((s = reader.readUTF()) != null) {
-                        System.out.println(String.format("incoming message (%s): %s",name,s));
+                    while (true) {
+                        System.out.println(String.format("incoming message (%s): %s", name, reader.readUTF()));
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             };

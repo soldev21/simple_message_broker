@@ -21,16 +21,24 @@ public class ChatServer {
     private void init() throws IOException {
         serverSocket = new ServerSocket(port);
         isRunning = true;
-        while (isRunning){
-            Socket socket = serverSocket.accept();
-            System.out.println("New Connection accepted.");
-            Thread t = new Thread(new ClientHandler(socket));
-            t.setDaemon(true);
-            t.start();
-        }
+        Runnable runnable = () -> {
+            while (isRunning) {
+                try {
+                    Socket socket = serverSocket.accept();
+                    System.out.println("New Connection accepted.");
+                    Thread t = new Thread(new ClientHandler(socket));
+                    t.setDaemon(true);
+                    t.start();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(runnable).start();
     }
 
-    public void stop(){
+    public void stop() throws IOException {
         isRunning = false;
+        serverSocket.close();
     }
 }
