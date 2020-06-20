@@ -2,6 +2,7 @@ package az.edutech.broker.server;
 
 import az.edutech.broker.Client;
 import az.edutech.broker.client.ClientHandler;
+import az.edutech.broker.registry.ClientHandlerRegistry;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,9 +13,11 @@ public class ChatServer {
     private ServerSocket serverSocket;
     private int port;
     private boolean isRunning;
+    private ClientHandlerRegistry registry;
 
     public ChatServer(int port) throws IOException {
         this.port = port;
+        registry = new ClientHandlerRegistry();
         init();
     }
 
@@ -26,7 +29,7 @@ public class ChatServer {
                 try {
                     Socket socket = serverSocket.accept();
                     System.out.println("New Connection accepted.");
-                    Thread t = new Thread(new ClientHandler(socket));
+                    Thread t = new Thread(new ClientHandler(socket,registry));
                     t.setDaemon(true);
                     t.start();
                 }catch (Exception e){
