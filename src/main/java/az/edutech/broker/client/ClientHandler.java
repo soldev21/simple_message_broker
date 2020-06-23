@@ -37,11 +37,13 @@ public class ClientHandler implements Runnable {
                 handleMessage(in.readUTF());
             } catch (IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
     }
 
     private void handleMessage(String s) {
+        System.out.println(s);
         try {
             Request request = mapper.readValue(s, Request.class);
             if (authorized) {
