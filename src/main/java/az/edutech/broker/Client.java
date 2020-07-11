@@ -44,13 +44,21 @@ public class Client {
                     System.out.println(inputStream.readUTF());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         }).start();
 
         while (true){
             Request r = new Request();
-            r.setData(scanner.nextLine());
+            String s = scanner.nextLine();
+            if (s.equals("exit")) {
+                socket.close();
+                inputStream.close();
+                outputStream.close();
+                break;
+            }
+            r.setData(s);
 //            r.setData(new Data(scanner.nextLine()));
             outputStream.writeUTF(Utility.mapper.writeValueAsString(r));
         }

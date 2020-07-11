@@ -37,6 +37,7 @@ public class ClientHandler implements Runnable {
                 handleMessage(in.readUTF());
             } catch (IOException e) {
                 e.printStackTrace();
+                registry.getRegistry().remove(user.getUsername());
                 break;
             }
         }
@@ -48,7 +49,7 @@ public class ClientHandler implements Runnable {
             Request request = mapper.readValue(s, Request.class);
             if (authorized) {
 //                Data data = mapper.convertValue(request.getData(),Data.class);
-//                System.out.println(String.format("%s: %s",this.user.getUsername(),request.getData()));
+                System.out.println(String.format("%s: %s",this.user.getUsername(),request.getData()));
                 registry.getRegistry().entrySet().stream().filter(e->!e.getKey().equals(user.getUsername())).forEach(
                         e->e.getValue().sendMessage(String.format("%s: %s",this.user.getUsername(),request.getData()))
                 );
